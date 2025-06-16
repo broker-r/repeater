@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"log/slog"
 	"os"
 	addWord_handler "repeater/internal/flag-handlers/add_word"
@@ -15,6 +16,8 @@ import (
 )
 
 func main() {
+	fmt.Println() // for beautiful output
+
 	var opts options.Opts
 	flags.Parse(&opts)
 
