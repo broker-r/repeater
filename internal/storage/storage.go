@@ -68,7 +68,7 @@ func (s *Storage) AddWord(name string) error {
 	return nil
 }
 
-func (s *Storage) RemoveWord(name string) error {
+func (s *Storage) DeleteWord(name string) error {
 	stmt, err := s.db.Prepare(`DELETE FROM word WHERE name = ?;`)
 	if err != nil {
 		return err
