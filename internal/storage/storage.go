@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"log"
 	"log/slog"
+	"time"
 
 	_ "github.com/mattn/go-sqlite3"
 )
@@ -100,7 +101,13 @@ func (s *Storage) GetWords() ([]Word, error) {
 
 	for rows.Next() {
 		var word Word
-		err := rows.Scan(&word.Name, &word.Repeat_counter, &word.Last_repeat)
+		var last_repeat string
+		err := rows.Scan(&word.Name, &word.Repeat_counter, &last_repeat)
+		if err != nil {
+			return nil, err
+		}
+		repeat_time, err := time.Parse(time.RFC3339, last_repeat)
+		word.Last_repeat = repeat_time.Format("2006-01-02 15:04:05")
 		if err != nil {
 			return nil, err
 		}
