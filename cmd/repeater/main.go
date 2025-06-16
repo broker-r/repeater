@@ -13,7 +13,7 @@ var opts struct {
 	Count      int    `short:"c" long:"count" description:"Start repeating selected number of words"`
 	List       bool   `short:"l" long:"list" description:"Print all words in storage"`
 	AddWord    string `short:"a" long:"add" description:"Add a word to storage"`
-	RemoveWord string `short:"r" long:"remove" description:"Remove a word from storage"`
+	DeleteWord string `short:"d" long:"delete" description:"Delete a word from storage"`
 }
 
 func main() {
