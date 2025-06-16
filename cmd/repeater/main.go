@@ -1,24 +1,21 @@
 package main
 
 import (
-	"fmt"
 	"log/slog"
 	"os"
+	addWord_handler "repeater/internal/flag-handlers/add_word"
+	count_handler "repeater/internal/flag-handlers/count"
+	deleteWord_handler "repeater/internal/flag-handlers/delete_word"
+	list_handler "repeater/internal/flag-handlers/list"
+	"repeater/internal/options"
 	"repeater/internal/prettylog"
 	"repeater/internal/storage"
 
 	"github.com/jessevdk/go-flags"
 )
 
-var opts struct {
-	Repeat     bool   `short:"r" long:"repeat" description:"Start repeating all words"`
-	Count      int    `short:"c" long:"count" description:"Start repeating selected number of words"`
-	List       bool   `short:"l" long:"list" description:"Print all words in storage"`
-	AddWord    string `short:"a" long:"add" description:"Add a word to storage"`
-	DeleteWord string `short:"d" long:"delete" description:"Delete a word from storage"`
-}
-
 func main() {
+	var opts options.Opts
 	flags.Parse(&opts)
 
 	logger := setupLogger()
@@ -27,31 +24,14 @@ func main() {
 
 	storage := storage.NewStorage("./db.sqlite3", logger)
 
-	if opts.AddWord != "" {
-		if err := storage.AddWord(opts.AddWord); err != nil {
-			logger.Error("Error", prettylog.PrettyError(err))
-		}
-	}
+	addWord_handler.Handle(&opts, logger, storage)
 
-	if opts.List {
-		words, err := storage.GetWords()
-		if err != nil {
-			logger.Error("Error", prettylog.PrettyError(err))
-			os.Exit(1)
-		}
-		fmt.Printf("%-10s | %-15s | %-20s|\n", "NAME", "REPEAT COUNTER", "LAST REPEAT")
-		for _, word := range words {
-			fmt.Printf("%-10s | %-15d | %-20s|\n", word.Name, word.Repeat_counter, word.Last_repeat)
-		}
-	}
+	deleteWord_handler.Handle(&opts, logger, storage)
 
-	if opts.AddWord != "" {
-		storage.AddWord(opts.AddWord)
-	}
+	count_handler.Handle(&opts, logger, storage)
 
-	if opts.DeleteWord != "" {
-		storage.RemoveWord(opts.DeleteWord)
-	}
+	list_handler.Handle(&opts, logger, storage)
+
 }
 
 func setupLogger() *slog.Logger {
