@@ -20,8 +20,6 @@ func main() {
 	flags.Parse(&opts)
 
 	logger := setupLogger()
-	logger.Debug("Debug mode enabled")
-	logger.Debug("Options", "options", opts)
 }
 
 func setupLogger() *slog.Logger {
