@@ -41,8 +41,8 @@ func NewStorage(dbpath string, logger *slog.Logger) *Storage {
 
 func (s *Storage) CreateTables() error {
 	_, err := s.db.Exec(`CREATE TABLE IF NOT EXISTS word (
-    name text primary_key UNIQUE,
-	translation text NOT NULL,
+    name string primary_key UNIQUE,
+	translation string NOT NULL,
     repeat_counter integer DEFAULT 0,
     last_repeat timestamp DEFAULT CURRENT_TIMESTAMP
 )`)
@@ -54,18 +54,16 @@ func (s *Storage) CreateTables() error {
 	return nil
 }
 
-func (s *Storage) AddWord(name string) error {
-	stmt, err := s.db.Prepare(`INSERT INTO word (name) VALUES (?);`)
+func (s *Storage) AddWord(name string, translation string) error {
+	stmt, err := s.db.Prepare(`INSERT INTO word (name, translation) VALUES (?, ?);`)
 	if err != nil {
 		return err
 	}
 
-	_, err = stmt.Exec(name)
+	_, err = stmt.Exec(name, translation)
 	if err != nil {
 		return err
 	}
-
-	s.logger.Debug("Word added: " + name)
 
 	return nil
 }
@@ -104,7 +102,7 @@ func (s *Storage) GetWords() ([]Word, error) {
 	for rows.Next() {
 		var word Word
 		var last_repeat string
-		err := rows.Scan(&word.Name, &word.Repeat_counter, &last_repeat)
+		err := rows.Scan(&word.Name, &word.Translation, &word.Repeat_counter, &last_repeat)
 		if err != nil {
 			return nil, err
 		}

@@ -25,9 +25,9 @@ func Handle(opts *options.Opts, logger *slog.Logger, storage *storage.Storage) {
 }
 
 func PrintWords(words []storage.Word) {
-	fmt.Printf("%-20s | %-20s | %-30s|\n", "NAME", "REPEAT COUNTER", "LAST REPEAT")
+	fmt.Printf("%-20s | %-20s | %-20s | %-30s|\n", "NAME", "TRANSLATION", "REPEAT COUNTER", "LAST REPEAT")
 	for _, word := range words {
-		fmt.Printf("%-20s | %-20d | %-30s|\n", word.Name, word.Repeat_counter, word.Last_repeat)
+		fmt.Printf("%-20s | %-20s | %-20d | %-30s|\n", word.Name, word.Translation, word.Repeat_counter, word.Last_repeat)
 	}
 	fmt.Println()
 }

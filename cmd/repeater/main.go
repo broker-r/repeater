@@ -24,7 +24,9 @@ func main() {
 	logger := setupLogger()
 	storage := storage.NewStorage("./db.sqlite3", logger)
 
-	addWord_handler.Handle(&opts, logger, storage)
+	if err := addWord_handler.Handle(&opts, logger, storage); err != nil {
+		os.Exit(1)
+	}
 
 	deleteWord_handler.Handle(&opts, logger, storage)
 
