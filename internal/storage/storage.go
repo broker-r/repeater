@@ -16,6 +16,7 @@ type Storage struct {
 
 type Word struct {
 	Name           string
+	Translation    string
 	Repeat_counter int
 	Last_repeat    string
 }
@@ -40,7 +41,8 @@ func NewStorage(dbpath string, logger *slog.Logger) *Storage {
 
 func (s *Storage) CreateTables() error {
 	_, err := s.db.Exec(`CREATE TABLE IF NOT EXISTS word (
-    name string primary_key UNIQUE,
+    name text primary_key UNIQUE,
+	translation text NOT NULL,
     repeat_counter integer DEFAULT 0,
     last_repeat timestamp DEFAULT CURRENT_TIMESTAMP
 )`)
