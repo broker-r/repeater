@@ -6,4 +6,5 @@ type Opts struct {
 	List       bool   `short:"l" long:"list" description:"Print all words in storage"`
 	AddWord    string `short:"a" long:"add" description:"Add a word to storage"`
 	DeleteWord string `short:"d" long:"delete" description:"Delete a word from storage"`
+	EraseWords bool   `short:"e" long:"erase" description:"Delete all words from storage"`
 }

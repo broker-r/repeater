@@ -7,6 +7,7 @@ import (
 	addWord_handler "repeater/internal/flag-handlers/add_word"
 	count_handler "repeater/internal/flag-handlers/count"
 	deleteWord_handler "repeater/internal/flag-handlers/delete_word"
+	erasewords_handler "repeater/internal/flag-handlers/erase_words"
 	list_handler "repeater/internal/flag-handlers/list"
 	"repeater/internal/options"
 	"repeater/internal/prettylog"
@@ -29,9 +30,8 @@ func main() {
 	}
 
 	deleteWord_handler.Handle(&opts, logger, storage)
-
+	erasewords_handler.Handle(&opts, logger, storage)
 	count_handler.Handle(&opts, logger, storage)
-
 	list_handler.Handle(&opts, logger, storage)
 }
 

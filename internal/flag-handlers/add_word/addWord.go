@@ -27,7 +27,6 @@ func Handle(opts *options.Opts, logger *slog.Logger, storage *storage.Storage) e
 			return err
 		}
 
-
 		fmt.Printf("Enter translation for '%s' (Default = '%s'): ", opts.AddWord, translated.Text)
 		fmt.Scanf("%s", &translation)
 
