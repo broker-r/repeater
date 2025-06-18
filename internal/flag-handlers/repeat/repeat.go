@@ -16,67 +16,65 @@ import (
 
 func Handle(opts *options.Opts, logger *slog.Logger, storage *storage.Storage) {
 	if opts.Repeat {
-		words, err := storage.GetWords()
-		if err != nil {
-			logger.Error("Error when getting words from the database", prettylog.PrettyError(err))
-			os.Exit(1)
-		}
-
-		sorted_words, err := sorter.Sort(words, logger)
-		if err != nil {
-			logger.Error("Error when sorting words", prettylog.PrettyError(err))
-			os.Exit(1)
-		}
-
-		r_level := rand.IntN(4)
-		for notEmpty := false; notEmpty; {
-			if len(sorted_words[r_level]) == 0 {
-				if r_level == sorter.LEVELS_COUNT {
-					r_level = 1
-				} else {
-					r_level++
-				}
-			} else {
-				notEmpty = true
-			}
-		}
-		r_wordIndex := rand.IntN(len(sorted_words[r_level]))
-		r_word := sorted_words[r_level][r_wordIndex]
-		_ = r_word
-
-		/////// DO NOT PUSH IN MAIN.
-
-		if len(words) == 0 {
-			fmt.Println("You dont have any words in your storage!")
-			return
-		}
 
 		fmt.Println(color.CyanString("[REPEAT MODE]"))
-
 		var translation string
+		for {
+			words, err := storage.GetWords()
+			if err != nil {
+				logger.Error("Error when getting words from the database", prettylog.PrettyError(err))
+				os.Exit(1)
+			}
 
-		for i := 0; i < len(words); {
-			fmt.Printf("Translate word: %s: ", color.HiYellowString(words[i].Name))
-			fmt.Scanf("%s", &translation)
-			fmt.Printf("Correct answer: %s\n", color.GreenString(words[i].Translation))
-			if strings.EqualFold(translation, words[i].Translation) {
-				fmt.Println(color.RedString("You answered incorrectly."))
+			if len(words) == 0 {
+				fmt.Println("You dont have any words in your storage!")
+				return
+			}
+
+			sorted_words, err := sorter.Sort(words, logger)
+			if err != nil {
+				logger.Error("Error when sorting words", prettylog.PrettyError(err))
+				os.Exit(1)
+			}
+
+			r_number := rand.IntN(100)
+			var r_level int
+			if r_number < 60 {
+				r_level = 1
+			} else if r_number < 90 {
+				r_level = 2
 			} else {
+				r_level = 3
+			}
+
+			for empty := true; empty; {
+				if len(sorted_words[r_level]) == 0 {
+					if r_level == sorter.LEVELS_COUNT {
+						r_level = 1
+					} else {
+						r_level++
+					}
+				} else {
+					empty = false
+				}
+			}
+
+			r_wordIndex := rand.IntN(len(sorted_words[r_level]))
+			r_word := sorted_words[r_level][r_wordIndex] // random word (random_level + random_index)
+
+			fmt.Printf("Translate word: %s: ", color.HiYellowString(r_word.Name))
+			fmt.Scanf("%s", &translation)
+			fmt.Printf("Correct answer: %s\n", color.HiGreenString(r_word.Translation))
+			if strings.EqualFold(translation, r_word.Translation) {
 				fmt.Println(color.GreenString("You answered correctly!"))
-				storage.ChangeCounter(words[i].Name, 1)
-				storage.UpdateTime(words[i].Name)
+				storage.ChangeCounter(r_word.Name, 1)
+				storage.UpdateTime(r_word.Name)
+			} else {
+				fmt.Println(color.RedString("You answered incorrectly."))
 			}
 			fmt.Println()
 
-			if i == len(words)-1 {
-				// пересчет мапы
-				i = 0
-			} else {
-				i++
-			}
-
-			translation = ""
+			translation = "" // Reset translation
 		}
-
 	}
 }

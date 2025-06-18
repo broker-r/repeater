@@ -54,7 +54,5 @@ func Sort(words []storage.Word, logger *slog.Logger) (map[int][]storage.Word, er
 		}
 	}
 
-	logger.Debug("SORTED MAP", "sorted_words", sorted_words)
-
 	return sorted_words, nil
 }
