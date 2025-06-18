@@ -11,7 +11,7 @@ import (
 	gtranslate "github.com/gilang-as/google-translate"
 )
 
-func Handle(opts *options.Opts, logger *slog.Logger, storage *storage.Storage) error {
+func Handle(opts *options.Opts, logger *slog.Logger, storage *storage.Storage) {
 	if opts.AddWord != "" {
 		var translation string // final translation
 
@@ -23,8 +23,8 @@ func Handle(opts *options.Opts, logger *slog.Logger, storage *storage.Storage) e
 
 		translated, err := gtranslate.Translator(value)
 		if err != nil {
-			logger.Error("Error when translation text", prettylog.PrettyError(err))
-			return err
+			logger.Debug("Error when translation text", prettylog.PrettyError(err))
+			os.Exit(1)
 		}
 
 		fmt.Printf("Enter translation for '%s' (Default = '%s'): ", opts.AddWord, translated.Text)
@@ -35,12 +35,9 @@ func Handle(opts *options.Opts, logger *slog.Logger, storage *storage.Storage) e
 		}
 
 		if err := storage.AddWord(opts.AddWord, translation); err != nil {
-			logger.Error("Error when adding a word to the database", prettylog.PrettyError(err))
+			logger.Debug("Error when adding a word to the database", prettylog.PrettyError(err))
+			fmt.Println("The word has already been added")
 			os.Exit(1)
 		}
-
-		fmt.Printf("Word added successfully: '%s' ('%s')\n", opts.AddWord, translation)
 	}
-
-	return nil
 }

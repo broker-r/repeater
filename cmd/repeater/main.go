@@ -26,21 +26,17 @@ func main() {
 	logger := setupLogger()
 	storage := storage.NewStorage("./db.sqlite3", logger)
 
-	if err := addWord_handler.Handle(&opts, logger, storage); err != nil {
-		os.Exit(1)
-	}
-
 	deleteWord_handler.Handle(&opts, logger, storage)
 	erasewords_handler.Handle(&opts, logger, storage)
+	addWord_handler.Handle(&opts, logger, storage)
 	count_handler.Handle(&opts, logger, storage)
 	list_handler.Handle(&opts, logger, storage)
-
 	repeat_handler.Handle(&opts, logger, storage)
 }
 
 func setupLogger() *slog.Logger {
 	opts := &slog.HandlerOptions{
-		Level: slog.LevelDebug,
+		Level: slog.LevelInfo,
 	}
 
 	prettyHandler := prettylog.NewPrettyHandler(os.Stdout, opts)

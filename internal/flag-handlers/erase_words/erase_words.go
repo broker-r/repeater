@@ -11,7 +11,7 @@ import (
 func Handle(opts *options.Opts, logger *slog.Logger, storage *storage.Storage) {
 	if opts.EraseWords {
 		if err := storage.DeleteAllWords(); err != nil {
-			logger.Error("Error when deleting all words from the database", prettylog.PrettyError(err))
+			logger.Debug("Error when deleting all words from the database", prettylog.PrettyError(err))
 			os.Exit(1)
 		}
 	}

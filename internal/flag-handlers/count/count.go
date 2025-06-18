@@ -16,7 +16,7 @@ func Handle(opts *options.Opts, logger *slog.Logger, storage *storage.Storage) {
 	if opts.Count > 0 {
 		words, err := storage.GetWords()
 		if err != nil {
-			logger.Error("Error when getting words from the database", prettylog.PrettyError(err))
+			logger.Debug("Error when getting words from the database", prettylog.PrettyError(err))
 			os.Exit(1)
 		}
 

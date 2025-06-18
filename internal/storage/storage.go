@@ -138,7 +138,7 @@ func (s *Storage) ChangeCounter(name string, value int) error {
 
 	_, err = stmt.Exec(value, name)
 	if err != nil {
-		s.logger.Error("Error when changing repeat_counter", prettylog.PrettyError(err))
+		s.logger.Debug("Error when changing repeat_counter", prettylog.PrettyError(err))
 		return err
 	}
 
@@ -155,7 +155,7 @@ func (s *Storage) UpdateTime(name string) error {
 
 	_, err = stmt.Exec(current_time, name)
 	if err != nil {
-		s.logger.Error("Error when updating last_repeat", prettylog.PrettyError(err))
+		s.logger.Debug("Error when updating last_repeat", prettylog.PrettyError(err))
 		return err
 	}
 

@@ -22,7 +22,7 @@ func Handle(opts *options.Opts, logger *slog.Logger, storage *storage.Storage) {
 		for {
 			words, err := storage.GetWords()
 			if err != nil {
-				logger.Error("Error when getting words from the database", prettylog.PrettyError(err))
+				logger.Debug("Error when getting words from the database", prettylog.PrettyError(err))
 				os.Exit(1)
 			}
 
@@ -33,7 +33,7 @@ func Handle(opts *options.Opts, logger *slog.Logger, storage *storage.Storage) {
 
 			sorted_words, err := sorter.Sort(words, logger)
 			if err != nil {
-				logger.Error("Error when sorting words", prettylog.PrettyError(err))
+				logger.Debug("Error when sorting words", prettylog.PrettyError(err))
 				os.Exit(1)
 			}
 
