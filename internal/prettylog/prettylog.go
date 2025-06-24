@@ -48,7 +48,7 @@ func (h PrettyHandler) Handle(ctx context.Context, record slog.Record) error {
 		message = color.HiRedString(message)
 	}
 
-	attrs := make(map[string]interface{}, record.NumAttrs())
+	attrs := make(map[string]any, record.NumAttrs())
 
 	record.Attrs(func(attr slog.Attr) bool {
 		attrs[attr.Key] = attr.Value.Any()
